@@ -60,7 +60,7 @@ def initial_view(n):
     if n == 0:
         """When user clicks 'Fetch DRF Data', call the DRF endpoint with the OAuth token."""
         token = auth.get_token()
-        print(token)
+
         if not token:
             return "No token found. You may need to authorize first."
 
@@ -79,7 +79,7 @@ def initial_view(n):
             if user_resp.status_code == 200:
                 data = user_resp.json()
                 user_res = json.dumps(data)
-            # print(people_res,user_res)
+
             return people_res, user_res
         except Exception as e:
             return f"Error calling DRF: {str(e)}"
