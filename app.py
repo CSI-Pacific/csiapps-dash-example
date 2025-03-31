@@ -7,14 +7,16 @@ import json
 from dotenv import load_dotenv
 load_dotenv()
 
+SITE_URL = os.environ.get("SITE_URL","http://localhost:8000")
+
 # using spotify as an example
-AUTH_URL = "http://127.0.0.1:8000/o/authorize"
-TOKEN_URL = "http://127.0.0.1:8000/o/token/"
+AUTH_URL = f"{SITE_URL}/o/authorize"
+TOKEN_URL = f"{SITE_URL}/o/token/"
 CLIENT_ID = os.environ.get("CLIENT_ID")
 CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
 
-API_PEOPLE_URL = "http://127.0.0.1:8000/api/registration/persons/"
-API_ME_URL = "http://127.0.0.1:8000/api/csiauth/me/"
+API_PEOPLE_URL = f"{SITE_URL}/api/registration/persons/"
+API_ME_URL = f"{SITE_URL}/api/csiauth/me/"
 
 # creating the instance of our auth class
 auth = DashAuthExternal(AUTH_URL,
