@@ -62,33 +62,38 @@ app.layout = html.Div([
     Input("init-interval", "n_intervals")
 )
 def initial_view(n):
-    if n == 0:
-        """When user clicks 'Fetch DRF Data', call the DRF endpoint with the OAuth token."""
-        token = auth.get_token()
+    """When user clicks 'Fetch DRF Data', call the DRF endpoint with the OAuth token."""
+    token = auth.get_token()
 
-        if not token:
-            return "No token found. You may need to authorize first."
+    if not token:
+        return no_update
+        # return [], "No token found. You may need to authorize first."
 
-        # Call DRF using the Bearer token
-        headers = {"Authorization": f"Bearer {token}"}
-        people_res = []
-        user_res = ""
-        try:
-            people_resp = requests.get(API_PEOPLE_URL, headers=headers, timeout=5)
-            user_resp = requests.get(API_ME_URL, headers=headers, timeout=5)
+    # Call DRF using the Bearer token
+    headers = {"Authorization": f"Bearer {token}"}
+    people_res = []
+    user_res = ""
+    try:
+        people_resp = requests.get(API_PEOPLE_URL, headers=headers, timeout=5)
+        user_resp = requests.get(API_ME_URL, headers=headers, timeout=5)
 
-            if people_resp.status_code == 200:
-                # Return raw JSON as a string
-                data = people_resp.json()
-                people_res = data.get("results", [])
-            if user_resp.status_code == 200:
-                data = user_resp.json()
-                user_res = json.dumps(data)
+        if people_resp.status_code == 200:
+            # Return raw JSON as a string
+            data = people_resp.json()
+            people_res = data.get("results", [])
 
-            return people_res, user_res
-        except Exception as e:
-            return f"Error calling DRF: {str(e)}"
-    return no_update
+        if user_resp.status_code == 200:
+            data = user_resp.json()
+            user_res = json.dumps(data,indent=2)
+
+        return people_res, user_res
+
+    except Exception as e:
+        print(f"Error calling DRF: {str(e)}")
+        # return [], f"Error calling DRF: {str(e)}"
+        return no_update
+
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=8050)
